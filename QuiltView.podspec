@@ -20,7 +20,7 @@ QuiltView will layout CollectionView cells with various widths and heights on th
   s.source           = { :git => 'https://github.com/facetdigital/QuiltView.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/FacetDigital'
 
-  s.ios.deployment_target = '10.2'
+  s.ios.deployment_target = '9.0'
   s.tvos.deployment_target = '10.1'
 
   s.source_files = 'QuiltView/Classes/*'
