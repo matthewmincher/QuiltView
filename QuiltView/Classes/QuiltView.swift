@@ -27,7 +27,7 @@ public class QuiltView : UICollectionViewLayout {
     }
   }
   
-  public var scrollDirection = UICollectionViewScrollDirection.vertical {
+	public var scrollDirection = UICollectionView.ScrollDirection.vertical {
     didSet {
       self.invalidateLayout()
     }
@@ -91,7 +91,7 @@ public class QuiltView : UICollectionViewLayout {
   // MARK: UICollectionViewLayoutDelegate
   
   override public var collectionViewContentSize : CGSize {
-    let contentRect = UIEdgeInsetsInsetRect(self.collectionView!.frame, self.collectionView!.contentInset)
+    let contentRect = self.collectionView!.frame.inset(by: self.collectionView!.contentInset)
     var size        = CGSize(width: contentRect.width, height: (self.furthestBlockPoint.y + 1) * self.itemBlockSize.height)
     
     if !self.isVertical() {
@@ -142,7 +142,7 @@ public class QuiltView : UICollectionViewLayout {
     
     let frame        = self.frameForIndexPath(path: indexPath)
     let attributes   = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-    attributes.frame = UIEdgeInsetsInsetRect(frame, insets)
+    attributes.frame = frame.inset(by: insets)
     
     if let preCalcAttributes = self.cellLayoutInfo[indexPath] {
       attributes.zIndex      = preCalcAttributes.zIndex
@@ -160,7 +160,7 @@ public class QuiltView : UICollectionViewLayout {
     super.prepare(forCollectionViewUpdates: updateItems)
     
     for item in updateItems {
-      if (item.updateAction == UICollectionUpdateAction.insert || item.updateAction == UICollectionUpdateAction.move) {
+		if (item.updateAction == UICollectionViewUpdateItem.Action.insert || item.updateAction == UICollectionViewUpdateItem.Action.move) {
         self.fillInBlocksToIndexPath(path: item.indexPathAfterUpdate!)
       }
     }
@@ -265,7 +265,7 @@ public class QuiltView : UICollectionViewLayout {
         if spaceAvailable && maximumRestrictedBoundSize && !inBounds {
           #if DEBUG
             let text = isVertical ? "wide" : "tall"
-            print("\(self.className): layout is not \(text) enough for this piece size: \(NSStringFromCGSize(blockSize))! Adding anyway...")
+			print("\(self.className): layout is not \(text) enough for this piece size: \(NSCoder.string(for: blockSize))! Adding anyway...")
           #endif
           return true
         }
@@ -420,7 +420,7 @@ public class QuiltView : UICollectionViewLayout {
   private func frameForIndexPath(path: IndexPath) -> CGRect {
     let position    = self.positionForIndexPath(path: path)
     let elementSize = self.getBlockSizeForItemAtIndexPath(indexPath: path)
-    let contentRect = UIEdgeInsetsInsetRect(self.collectionView!.frame, self.collectionView!.contentInset)
+    let contentRect = self.collectionView!.frame.inset(by: self.collectionView!.contentInset)
     
     if self.isVertical() {
       // Definitions:
@@ -465,7 +465,7 @@ public class QuiltView : UICollectionViewLayout {
   // take, depending on if we are growing horizontally or vertically
   private func restrictedDimensionBlockSize() -> Int {
     let isVertical  = self.isVertical()
-    let contentRect = UIEdgeInsetsInsetRect(self.collectionView!.frame, self.collectionView!.contentInset)
+    let contentRect = self.collectionView!.frame.inset(by: self.collectionView!.contentInset)
     let size        = Int(isVertical ? contentRect.width / self.itemBlockSize.width : contentRect.height / self.itemBlockSize.height)
     
     if size == 0 {
@@ -473,7 +473,7 @@ public class QuiltView : UICollectionViewLayout {
       
       if (Temp.didShowMessage == false) {
         #if DEBUG
-          print("\(self.className): cannot fit block of size: \(NSStringFromCGSize(self.itemBlockSize)) in content rect \(NSStringFromCGRect(contentRect))!  Defaulting to 1")
+		print("\(self.className): cannot fit block of size: \(NSCoder.string(for: self.itemBlockSize)) in content rect \(NSCoder.string(for: contentRect))!  Defaulting to 1")
         #endif
         
         Temp.didShowMessage = true
@@ -486,6 +486,6 @@ public class QuiltView : UICollectionViewLayout {
   }
   
   private func isVertical() -> Bool {
-    return self.scrollDirection == UICollectionViewScrollDirection.vertical
+	return self.scrollDirection == UICollectionView.ScrollDirection.vertical
   }
 }
